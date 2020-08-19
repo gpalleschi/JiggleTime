@@ -15,7 +15,7 @@ pyautogui.PAUSE = 1
 pyautogui.FAILSAFE = True
 
 
-print("Welcome to JiggleTime v0.3!\n")
+print("Welcome to JiggleTime v0.4!\n")
 
 validHours = False
 validMinutes = False
@@ -52,17 +52,24 @@ print()
 minutes = float(minutes)
 hours = float(hours)
 jiggleCount = 0
+timeToSleep=60*minutes
+diffTime = 0
 
 print("Type CTRL+C to Cancel while the program is running.")
 print("Cancel will be delayed until the next jiggle.\n")
 for i in range ((int)((hours*60)/minutes)):
-    print("jiggling... ", flush=True)
-    pyautogui.moveRel(25, 0, duration=0.25)
+    jigglingTime = datetime.datetime.now()
+    print("jiggling... at ", jigglingTime, flush=True)
     pyautogui.click()
+    pyautogui.moveRel(25, 0, duration=0.25)
     pyautogui.moveRel(-25, 0, duration=0.25)
     pyautogui.rightClick()
     jiggleCount = jiggleCount+1
-    time.sleep(60*minutes)
+    timeToSleep-=diffTime
+    time.sleep(timeToSleep)
+    afterSleepTime = datetime.datetime.now()
+    diffTime=(afterSleepTime-datetime.datetime(1970,1,1)).total_seconds()-(jigglingTime-datetime.datetime(1970,1,1)).total_seconds()-(60*minutes)
+#    print("DEBUG LINE diffTime is ...  ", diffTime, flush=True)
 pyautogui.moveRel(-25, 0, duration=0.25)
 
 endTime = datetime.datetime.now()
@@ -84,6 +91,3 @@ while(True):
         time.sleep(1)
     except:
         break
-        
-
-
